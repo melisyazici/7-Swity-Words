@@ -37,6 +37,7 @@ class ViewController: UIViewController {
         answersLabel.translatesAutoresizingMaskIntoConstraints = false
         answersLabel.font = UIFont.systemFont(ofSize: 24)
         answersLabel.text = "ANSWERS"
+        answersLabel.textAlignment = .right
         answersLabel.numberOfLines = 0
         view.addSubview(answersLabel)
         
@@ -66,6 +67,9 @@ class ViewController: UIViewController {
             currentAnswer.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.5),
             currentAnswer.topAnchor.constraint(equalTo: cluesLabel.bottomAnchor, constant: 20),
         ])
+        
+        cluesLabel.backgroundColor = .red
+        answersLabel.backgroundColor = .blue
         
     }
 
