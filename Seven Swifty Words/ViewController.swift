@@ -97,10 +97,28 @@ class ViewController: UIViewController {
             buttonsView.topAnchor.constraint(equalTo: submit.bottomAnchor, constant: 20),
             buttonsView.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor, constant: -20)
         ])
+        // Add values for the width and height of each button
+        let width = 150
+        let height = 80
         
-        cluesLabel.backgroundColor = .red
-        answersLabel.backgroundColor = .blue
-        buttonsView.backgroundColor = .green
+        // Create 20 buttons as a 4 by 5 grid
+        for row in 0..<4 {
+            for column in 0..<5 {
+                // creating the buttons
+                let letterButton = UIButton(type: .system)
+                letterButton.titleLabel?.font = UIFont.systemFont(ofSize: 36)
+                letterButton.setTitle("WWW", for: .normal) // temporarily give buttons a title
+                
+                // Calculate the frameless button using column and row
+                let frame = CGRect(x: column * width, y: row * height, width: width, height: height)
+                // Assign it here;
+                letterButton.frame = frame
+                // Add that to buttonsView;
+                buttonsView.addSubview(letterButton)
+                // Add it to the letterButtons' array;
+                letterButtons.append(letterButton)
+            }
+        }
         
     }
 
