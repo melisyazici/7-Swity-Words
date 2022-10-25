@@ -15,6 +15,12 @@ class ViewController: UIViewController {
     var scoreLabel: UILabel!
     var letterButtons = [UIButton]()
     
+    var activatedButtons = [UIButton]() // store all buttons are currently being tapped by the user to spell their answer
+    var solutions = [String]() // for all the possible solutions
+    
+    var score = 0 // to hold the player's score
+    var level = 1 // to hold the current level
+    
     // Create UI with a custom loadView method
     override func loadView() {
         view = UIView()
@@ -54,11 +60,13 @@ class ViewController: UIViewController {
         let submit = UIButton(type: .system)
         submit.translatesAutoresizingMaskIntoConstraints = false
         submit.setTitle("SUBMIT", for: .normal)
+        submit.addTarget(self, action: #selector(submitTapped), for: .touchUpInside) // when the user press the submit button call submitTapped on the current view controller
         view.addSubview(submit)
         
         let clear = UIButton(type: .system)
         clear.translatesAutoresizingMaskIntoConstraints = false
         clear.setTitle("CLEAR", for: .normal)
+        clear.addTarget(self, action: #selector(clearTapped), for: .touchUpInside) // when the user press the clear button call clearTapped on the current view controller
         view.addSubview(clear)
         
         let buttonsView = UIView()
@@ -108,6 +116,7 @@ class ViewController: UIViewController {
                 let letterButton = UIButton(type: .system)
                 letterButton.titleLabel?.font = UIFont.systemFont(ofSize: 36)
                 letterButton.setTitle("WWW", for: .normal) // temporarily give buttons a title
+                letterButton.addTarget(self, action: #selector(letterTapped), for: .touchUpInside)
                 
                 // Calculate the frameless button using column and row
                 let frame = CGRect(x: column * width, y: row * height, width: width, height: height)
@@ -124,7 +133,65 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        loadLevel()
+    }
+    
+    @objc func letterTapped(_ sender: UIButton) {
+        
+    }
+    
+    @objc func submitTapped(_ sender: UIButton) {
+        
+    }
+    
+    @objc func clearTapped(_ sender: UIButton) {
+        
+    }
+    
+    func loadLevel() {
+        var clueString = ""
+        var solutionsString = ""
+        var letterBits = [String]()
+        
+        // Find and load the level string from app bundle
+        if let levelFileURL = Bundle.main.url(forResource: "level\(level)", withExtension: "txt") {
+            if let levelContents = try? String(contentsOf: levelFileURL) {
+                var lines = levelContents.components(separatedBy: "\n")
+                lines.shuffle()
+                
+                // where index represents a consecutive integer starting at zero and line represents an element of the sequence so it will place the item into the line variable and its position into the index variable
+                for (index, line) in lines.enumerated() {
+                    let parts = line.components(separatedBy: ": ") // separating its letter groups from its clue
+                    let answer = parts[0] // the first part of the split line into "answer"
+                    let clue = parts[1] // the second part of the split line into "clue"
+                    
+                    clueString += "\(index + 1). \(clue)\n" // append the second part of the split line "clue" which is the clue to clueString variable, it will show that clues label
+                    
+                    let solutionWord = answer.replacingOccurrences(of: "|", with: "")
+                    solutionsString += "\(solutionWord.count) letters\n" // append the solution word splitted by | to the solutionString
+                    solutions.append(solutionWord) // append the solutionsString to solutions array
+                    
+                    let bits = answer.components(separatedBy: "|")
+                    letterBits += bits // add all the possible parts of all the words in the game that to the letterBits array
+                    
+                }
+            }
+        }
+        // because of the extra line break in clueString and solutionsString;
+        // removes any letters you specify from the start and end of a string
+        cluesLabel.text = clueString.trimmingCharacters(in: .whitespacesAndNewlines)
+        answersLabel.text = solutionsString.trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        // randomize the letter buttons
+        letterButtons.shuffle()
+        
+        // it's going to count through all letter buttons we have
+        if letterButtons.count == letterBits.count {
+            //  then assign that button's title to the matching bit in the letterBits array
+            for i in 0..<letterButtons.count {
+                letterButtons[i].setTitle(letterBits[i], for: .normal)
+            }
+        }
     }
 
 
