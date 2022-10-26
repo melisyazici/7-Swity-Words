@@ -146,7 +146,38 @@ class ViewController: UIViewController {
     }
     
     @objc func submitTapped(_ sender: UIButton) {
+        guard let answerText = currentAnswer.text else { return } // read out the answerText from currentAnswer text field
         
+        // search through the solutions array for an item and if it finds it, tells its position - find the answer text in the solutions array
+        if let solutionPosition = solutions.firstIndex(of: answerText) {
+            activatedButtons.removeAll() // remove all buttons from activated buttons array
+            
+            // If the user gets an answer correct, it's gonna change the answers label rather than saying "7 LETTERS", it says the correct answer user got
+            var splitAnswers = answersLabel.text?.components(separatedBy: "\n") // split up the answersLabel to the new variable splitAnswres
+            splitAnswers?[solutionPosition] = answerText // replace the line at the solution position with the solution itself - split answers at the solution position where their word was found and replace seven letters (which is answerText) with the solution itself
+            answersLabel.text = splitAnswers?.joined(separator: "\n") // re-join the answres label back together
+            
+            currentAnswer.text = "" // clear out the currentAnswer text field
+            score += 1 // add 1 to the score
+            
+            // if the score divides into seven evenly (zero left over) means the user finish the level, show a message "Well done"
+            if score % 7 == 0 {
+                let ac = UIAlertController(title: "Well done!", message: "Are you ready for the next level?", preferredStyle: .alert)
+                ac.addAction(UIAlertAction(title: "Let's go!", style: .default, handler: levelUp)) // take the user to the next level
+                present(ac, animated: true)
+            }
+        }
+    }
+    
+    func levelUp(action: UIAlertAction) {
+        level += 1 // add 1 to level
+        
+        solutions.removeAll(keepingCapacity: true) // remove all items from the solutions array - true because we have several solutions each time
+        loadLevel() // call loadLevel() so that a new level file is loaded and shown
+        
+        for btn in letterButtons {
+            btn.isHidden = false // all lettter buttons are visible
+        }
     }
     
     @objc func clearTapped(_ sender: UIButton) {
