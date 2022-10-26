@@ -137,7 +137,12 @@ class ViewController: UIViewController {
     }
     
     @objc func letterTapped(_ sender: UIButton) {
+        guard let buttonTittle = sender.titleLabel?.text else { return } // // adds a safety check to read the title from tapped button
         
+        currentAnswer.text = currentAnswer.text?.appending(buttonTittle) // appends that button title to the player’s current answer
+        
+        activatedButtons.append(sender) // appends the button to the activatedButtons array - activatedButtons array store all buttons are currently being tapped
+        sender.isHidden = true // hides the button that was tapped
     }
     
     @objc func submitTapped(_ sender: UIButton) {
@@ -145,7 +150,13 @@ class ViewController: UIViewController {
     }
     
     @objc func clearTapped(_ sender: UIButton) {
+        currentAnswer.text = "" // removes the text from the current answer text field
         
+        for btn in activatedButtons {
+            btn.isHidden = false // unhides all the activated buttons
+        }
+        
+        activatedButtons.removeAll() // removes all the items from activatedButtons array
     }
     
     func loadLevel() {
