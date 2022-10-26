@@ -78,6 +78,12 @@ class ViewController: UIViewController {
         buttonsView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(buttonsView)
         
+        // draw a thin gray line around the buttons view
+        buttonsView.layer.borderWidth = 0.5
+        buttonsView.layer.borderColor = UIColor.lightGray.cgColor
+        view.addSubview(buttonsView)
+        
+        
         // Add Auto Layout constraints
         NSLayoutConstraint.activate([
             scoreLabel.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor),
