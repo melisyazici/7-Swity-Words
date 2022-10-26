@@ -18,7 +18,12 @@ class ViewController: UIViewController {
     var activatedButtons = [UIButton]() // store all buttons are currently being tapped by the user to spell their answer
     var solutions = [String]() // for all the possible solutions
     
-    var score = 0 // to hold the player's score
+    var score = 0 { // to hold the player's score
+        didSet {
+            scoreLabel.text = "Score: \(score)" // synchronize the score value all over the code
+        }
+    }
+    
     var level = 1 // to hold the current level
     
     // Create UI with a custom loadView method
