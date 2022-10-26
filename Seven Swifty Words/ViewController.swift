@@ -177,6 +177,15 @@ class ViewController: UIViewController {
                 ac.addAction(UIAlertAction(title: "Let's go!", style: .default, handler: levelUp)) // take the user to the next level
                 present(ac, animated: true)
             }
+        } else {
+            let ac = UIAlertController(title: "Ups!", message: "You guessed wrong!", preferredStyle: .alert)
+            ac.addAction(UIAlertAction(title: "Try again!", style: .default))
+            present(ac, animated: true)
+            
+            currentAnswer.text = "" // clears the text field
+            for btn in activatedButtons {
+                btn.isHidden = false // put buttons back in their old place
+            }
         }
     }
     
