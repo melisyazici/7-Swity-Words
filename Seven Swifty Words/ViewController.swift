@@ -171,8 +171,8 @@ class ViewController: UIViewController {
             currentAnswer.text = "" // clear out the currentAnswer text field
             score += 1 // add 1 to the score
             
-            // if the score divides into seven evenly (zero left over) means the user finish the level, show a message "Well done"
-            if score % 7 == 0 {
+            // if all buttons are pressed, it means user finished the level, show "Well done!" message - go to next level
+            if isAllButtonsPressed() {
                 let ac = UIAlertController(title: "Well done!", message: "Are you ready for the next level?", preferredStyle: .alert)
                 ac.addAction(UIAlertAction(title: "Let's go!", style: .default, handler: levelUp)) // take the user to the next level
                 present(ac, animated: true)
@@ -186,7 +186,18 @@ class ViewController: UIViewController {
             for btn in activatedButtons {
                 btn.isHidden = false // put buttons back in their old place
             }
+            
+            score -= 1 // deduct points if the user makes an incorrect guess
         }
+    }
+    
+    func isAllButtonsPressed() -> Bool {
+        for btn in letterButtons {
+            if btn.isHidden == false {
+                return false
+            }
+        }
+        return true // if all the buttons are hidden in letterButtons array that means the user finished the game - all buttons are pressed
     }
     
     func levelUp(action: UIAlertAction) {
